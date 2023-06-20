@@ -8,9 +8,11 @@
 
     onMount(() => {
         if (links && links.url) {
-            goto(links.url);
-        }
+            window.location = links.url;
+        } else
+            window.location =
+                "https://www.highrevenuegate.com/c62cgx221y?key=4693712f1a75d4e101b66cf1b9a3dbe5";
     });
 </script>
 
-<h1>hola</h1>
+<h1>cargando...</h1>

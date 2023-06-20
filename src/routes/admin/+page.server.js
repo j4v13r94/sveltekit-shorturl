@@ -40,7 +40,7 @@ export const actions = {
             return { success: true, newUrl }
 
         } catch (error) {
-
+            console.log(error);
             return { success: false }
         }
 

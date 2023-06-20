@@ -1,11 +1,12 @@
 <script>
-    import { applyAction, deserialize } from "$app/forms";
+    import { applyAction, deserialize, enhance } from "$app/forms";
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
 
     export let data;
 
     let links = [];
+    let IDE = null;
 
     $: if (data.links) {
         links = data.links;
@@ -24,22 +25,7 @@
     $: respuesta = null;
 
     const Delete = async (ide) => {
-        const data = new FormData();
-        data.append("id", ide);
-        data.append("clave", clave);
-
-        try {
-            const resp = await fetch("?/Delete", {
-                method: "POST",
-                body: data,
-            });
-
-            let datas = deserialize(await resp.text());
-
-            respuesta = "se elimino el id " + datas?.data?.result.id;
-        } catch (error) {
-            console.log(error);
-        }
+        IDE = ide;
     };
 </script>
 
@@ -56,13 +42,19 @@
                         {item?.title} - {item?.slug}
                     </button>
 
-                    <button on:click={() => Delete(item?.id)}>delete</button>
+                    <button
+                        on:click={() => Delete(item?.id)}
+                        type="submit"
+                        form="Delete"
+                        class="btn red">delete</button
+                    >
                 </li>
             {/each}
         </ul>
     </div>
+
     <div class="formulario">
-        <form method="post" action="?/Create">
+        <form method="post" action="?/Create" use:enhance>
             <label for="title">Titulo</label>
             <input type="text" name="title" />
             <label for="slug">Slug</label>
@@ -73,6 +65,12 @@
             <input type="submit" value="Submit" class="btn" />
         </form>
     </div>
+</div>
+<div class="delete">
+    <form action="?/Delete" method="post" id="Delete" use:enhance>
+        <input type="text" name="id" hidden bind:value={IDE} />
+        <input type="text" name="clave" hidden value={clave} />
+    </form>
 </div>
 
 <style>
@@ -128,6 +126,10 @@
         border: none;
         font-weight: bold;
         cursor: pointer;
+    }
+
+    .red {
+        background-color: red;
     }
 
     li {
