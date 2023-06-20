@@ -1,6 +1,11 @@
 
 
 
+import { prisma } from '../lib/server/prisma';
+
+
+
+
 
 export const actions = {
 
@@ -12,9 +17,9 @@ export const actions = {
             const { title, url, slug } = Object.fromEntries(await request.formData())
 
             // @ts-ignore
-            // const newUrl = await prisma.url.create({ data: { title, url, slug } })
+            const newUrl = await prisma.url.create({ data: { title, url, slug } })
 
-            return { success: true }
+            return { success: true, newUrl }
 
         } catch (error) {
 
