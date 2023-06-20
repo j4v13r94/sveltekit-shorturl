@@ -1,5 +1,6 @@
 
 
+/** @type {import('./$types').Actions} */
 
 import { prisma } from '../lib/server/prisma';
 
